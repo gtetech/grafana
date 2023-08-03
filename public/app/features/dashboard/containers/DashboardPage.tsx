@@ -334,13 +334,12 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
     const { dashboard, initError, queryParams } = this.props;
     const { editPanel, viewPanel, updateScrollTop, pageNav, sectionNav } = this.state;
     const kioskMode = getKioskMode(this.props.queryParams);
-
     if (!dashboard || !pageNav || !sectionNav) {
       return <DashboardLoading initPhase={this.props.initPhase} />;
     }
 
     const inspectPanel = this.getInspectPanel();
-    const showSubMenu = !editPanel && !kioskMode && !this.props.queryParams.editview;
+    const showSubMenu = kioskMode === 'custom' || (!editPanel && !kioskMode && !this.props.queryParams.editview);
 
     const showToolbar = kioskMode !== KioskMode.Full && !queryParams.editview;
 

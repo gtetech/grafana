@@ -23,6 +23,8 @@ export function AppChrome({ children }: Props) {
 
   const searchBarHidden = state.searchBarHidden || state.kioskMode === KioskMode.TV;
 
+  const customKiosk = state.kioskMode === KioskMode.Custom;
+
   const contentClass = cx({
     [styles.content]: true,
     [styles.contentNoSearchBar]: searchBarHidden,
@@ -41,7 +43,7 @@ export function AppChrome({ children }: Props) {
             Skip to main content
           </LinkButton>
           <div className={cx(styles.topNav)}>
-            {!searchBarHidden && <TopSearchBar />}
+            {!customKiosk && !searchBarHidden && <TopSearchBar />}
             <NavToolbar
               searchBarHidden={searchBarHidden}
               sectionNav={state.sectionNav.node}
@@ -50,6 +52,7 @@ export function AppChrome({ children }: Props) {
               onToggleSearchBar={chrome.onToggleSearchBar}
               onToggleMegaMenu={chrome.onToggleMegaMenu}
               onToggleKioskMode={chrome.onToggleKioskMode}
+              customMode={customKiosk}
             />
           </div>
         </>

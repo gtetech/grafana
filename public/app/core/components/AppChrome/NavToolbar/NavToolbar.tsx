@@ -22,6 +22,7 @@ export interface Props {
   sectionNav: NavModelItem;
   pageNav?: NavModelItem;
   actions: React.ReactNode;
+  customMode?: boolean;
 }
 
 export function NavToolbar({
@@ -32,6 +33,7 @@ export function NavToolbar({
   onToggleMegaMenu,
   onToggleSearchBar,
   onToggleKioskMode,
+  customMode,
 }: Props) {
   const homeNav = useSelector((state) => state.navIndex)[HOME_NAV_ID];
   const styles = useStyles2(getStyles);
@@ -39,20 +41,24 @@ export function NavToolbar({
 
   return (
     <div data-testid={Components.NavToolbar.container} className={styles.pageToolbar}>
-      <div className={styles.menuButton}>
-        <IconButton
-          name="bars"
-          tooltip={t('navigation.toolbar.toggle-menu', 'Toggle menu')}
-          tooltipPlacement="bottom"
-          size="xl"
-          onClick={onToggleMegaMenu}
-        />
-      </div>
-      <Breadcrumbs breadcrumbs={breadcrumbs} className={styles.breadcrumbsWrapper} />
+      {!customMode ? (
+        <div className={styles.menuButton}>
+          <IconButton
+            name="bars"
+            tooltip={t('navigation.toolbar.toggle-menu', 'Toggle menu')}
+            tooltipPlacement="bottom"
+            size="xl"
+            onClick={onToggleMegaMenu}
+          />
+        </div>
+      ) : (
+        <div>Narayana dashboard</div>
+      )}
+      {!customMode && <Breadcrumbs breadcrumbs={breadcrumbs} className={styles.breadcrumbsWrapper} />}
       <div className={styles.actions}>
         {actions}
         {actions && <NavToolbarSeparator />}
-        {searchBarHidden && (
+        {!customMode && searchBarHidden && (
           <ToolbarButton
             onClick={onToggleKioskMode}
             narrow
@@ -60,13 +66,15 @@ export function NavToolbar({
             icon="monitor"
           />
         )}
-        <ToolbarButton
-          onClick={onToggleSearchBar}
-          narrow
-          title={t('navigation.toolbar.toggle-search-bar', 'Toggle top search bar')}
-        >
-          <Icon name={searchBarHidden ? 'angle-down' : 'angle-up'} size="xl" />
-        </ToolbarButton>
+        {!customMode && (
+          <ToolbarButton
+            onClick={onToggleSearchBar}
+            narrow
+            title={t('navigation.toolbar.toggle-search-bar', 'Toggle top search bar')}
+          >
+            {<Icon name={searchBarHidden ? 'angle-down' : 'angle-up'} size="xl" />}
+          </ToolbarButton>
+        )}
       </div>
     </div>
   );

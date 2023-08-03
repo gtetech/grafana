@@ -131,7 +131,9 @@ export class AppChromeService {
       case 'tv':
         this.update({ kioskMode: KioskMode.TV });
         break;
-      case '1':
+      case 'custom':
+        this.update({ kioskMode: KioskMode.Custom });
+        break;
       case true:
         this.update({ kioskMode: KioskMode.Full });
     }
@@ -143,6 +145,8 @@ export class AppChromeService {
         return 'tv';
       case KioskMode.Full:
         return true;
+      case KioskMode.Custom:
+        return 'custom';
       default:
         return null;
     }

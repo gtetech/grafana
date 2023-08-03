@@ -56,86 +56,88 @@ const DashboardEmpty = ({ dashboard, canCreate }: Props) => {
             <Trans i18nKey="dashboard.empty.add-visualization-button">Add visualization</Trans>
           </Button>
         </div>
-        <div className={cx(styles.centeredContent, styles.others)}>
-          {config.featureToggles.vizAndWidgetSplit && (
-            <div className={cx(styles.containerBox, styles.centeredContent, styles.widgetContainer)}>
+        {false && (
+          <div className={cx(styles.centeredContent, styles.others)}>
+            {config.featureToggles.vizAndWidgetSplit && (
+              <div className={cx(styles.containerBox, styles.centeredContent, styles.widgetContainer)}>
+                <div className={styles.headerSmall}>
+                  <Text element="h3" textAlignment="center" weight="medium">
+                    <Trans i18nKey="dashboard.empty.add-widget-header">Add a widget</Trans>
+                  </Text>
+                </div>
+                <div className={styles.bodySmall}>
+                  <Text element="p" textAlignment="center" color="secondary">
+                    <Trans i18nKey="dashboard.empty.add-widget-body">Create lists, markdowns and other widgets</Trans>
+                  </Text>
+                </div>
+                <Button
+                  icon="plus"
+                  fill="outline"
+                  data-testid={selectors.pages.AddDashboard.itemButton('Create new widget button')}
+                  onClick={() => {
+                    reportInteraction('dashboards_emptydashboard_clicked', { item: 'add_widget' });
+                    locationService.partial({ addWidget: true });
+                  }}
+                  disabled={!canCreate}
+                >
+                  <Trans i18nKey="dashboard.empty.add-widget-button">Add widget</Trans>
+                </Button>
+              </div>
+            )}
+            <div className={cx(styles.containerBox, styles.centeredContent, styles.rowContainer)}>
               <div className={styles.headerSmall}>
                 <Text element="h3" textAlignment="center" weight="medium">
-                  <Trans i18nKey="dashboard.empty.add-widget-header">Add a widget</Trans>
+                  <Trans i18nKey="dashboard.empty.add-row-header">Add a row</Trans>
                 </Text>
               </div>
               <div className={styles.bodySmall}>
                 <Text element="p" textAlignment="center" color="secondary">
-                  <Trans i18nKey="dashboard.empty.add-widget-body">Create lists, markdowns and other widgets</Trans>
+                  <Trans i18nKey="dashboard.empty.add-row-body">
+                    Group your visualizations into expandable sections.
+                  </Trans>
                 </Text>
               </div>
               <Button
                 icon="plus"
                 fill="outline"
-                data-testid={selectors.pages.AddDashboard.itemButton('Create new widget button')}
+                data-testid={selectors.pages.AddDashboard.itemButton('Create new row button')}
                 onClick={() => {
-                  reportInteraction('dashboards_emptydashboard_clicked', { item: 'add_widget' });
-                  locationService.partial({ addWidget: true });
+                  reportInteraction('dashboards_emptydashboard_clicked', { item: 'add_row' });
+                  onCreateNewRow(dashboard);
                 }}
                 disabled={!canCreate}
               >
-                <Trans i18nKey="dashboard.empty.add-widget-button">Add widget</Trans>
+                <Trans i18nKey="dashboard.empty.add-row-button">Add row</Trans>
               </Button>
             </div>
-          )}
-          <div className={cx(styles.containerBox, styles.centeredContent, styles.rowContainer)}>
-            <div className={styles.headerSmall}>
-              <Text element="h3" textAlignment="center" weight="medium">
-                <Trans i18nKey="dashboard.empty.add-row-header">Add a row</Trans>
-              </Text>
+            <div className={cx(styles.containerBox, styles.centeredContent, styles.libraryContainer)}>
+              <div className={styles.headerSmall}>
+                <Text element="h3" textAlignment="center" weight="medium">
+                  <Trans i18nKey="dashboard.empty.add-import-header">Import panel</Trans>
+                </Text>
+              </div>
+              <div className={styles.bodySmall}>
+                <Text element="p" textAlignment="center" color="secondary">
+                  <Trans i18nKey="dashboard.empty.add-import-body">
+                    Import visualizations that are shared with other dashboards.
+                  </Trans>
+                </Text>
+              </div>
+              <Button
+                icon="plus"
+                fill="outline"
+                data-testid={selectors.pages.AddDashboard.itemButton('Add a panel from the panel library button')}
+                onClick={() => {
+                  reportInteraction('dashboards_emptydashboard_clicked', { item: 'import_from_library' });
+                  onAddLibraryPanel(dashboard);
+                }}
+                disabled={!canCreate}
+              >
+                <Trans i18nKey="dashboard.empty.add-import-button">Import library panel</Trans>
+              </Button>
             </div>
-            <div className={styles.bodySmall}>
-              <Text element="p" textAlignment="center" color="secondary">
-                <Trans i18nKey="dashboard.empty.add-row-body">
-                  Group your visualizations into expandable sections.
-                </Trans>
-              </Text>
-            </div>
-            <Button
-              icon="plus"
-              fill="outline"
-              data-testid={selectors.pages.AddDashboard.itemButton('Create new row button')}
-              onClick={() => {
-                reportInteraction('dashboards_emptydashboard_clicked', { item: 'add_row' });
-                onCreateNewRow(dashboard);
-              }}
-              disabled={!canCreate}
-            >
-              <Trans i18nKey="dashboard.empty.add-row-button">Add row</Trans>
-            </Button>
           </div>
-          <div className={cx(styles.containerBox, styles.centeredContent, styles.libraryContainer)}>
-            <div className={styles.headerSmall}>
-              <Text element="h3" textAlignment="center" weight="medium">
-                <Trans i18nKey="dashboard.empty.add-import-header">Import panel</Trans>
-              </Text>
-            </div>
-            <div className={styles.bodySmall}>
-              <Text element="p" textAlignment="center" color="secondary">
-                <Trans i18nKey="dashboard.empty.add-import-body">
-                  Import visualizations that are shared with other dashboards.
-                </Trans>
-              </Text>
-            </div>
-            <Button
-              icon="plus"
-              fill="outline"
-              data-testid={selectors.pages.AddDashboard.itemButton('Add a panel from the panel library button')}
-              onClick={() => {
-                reportInteraction('dashboards_emptydashboard_clicked', { item: 'import_from_library' });
-                onAddLibraryPanel(dashboard);
-              }}
-              disabled={!canCreate}
-            >
-              <Trans i18nKey="dashboard.empty.add-import-button">Import library panel</Trans>
-            </Button>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
