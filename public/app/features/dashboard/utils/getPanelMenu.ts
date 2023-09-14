@@ -123,13 +123,12 @@ export function getPanelMenu(
   const menu: PanelMenuItem[] = [];
 
   if (!panel.isEditing) {
-    false &&
-      menu.push({
-        text: t('panel.header-menu.view', `View`),
-        iconClassName: 'eye',
-        onClick: onViewPanel,
-        shortcut: 'v',
-      });
+    menu.push({
+      text: t('panel.header-menu.view', `View`),
+      iconClassName: 'eye',
+      onClick: onViewPanel,
+      shortcut: 'v',
+    });
   }
 
   if (dashboard.canEditPanel(panel) && !panel.isEditing) {

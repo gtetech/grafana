@@ -410,6 +410,7 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
             editview={queryParams.editview}
             pageNav={pageNav}
             sectionNav={sectionNav}
+            queryParams={queryParams}
           />
         )}
         {queryParams.addWidget && config.featureToggles.vizAndWidgetSplit && <AddWidgetModal />}
