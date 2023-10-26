@@ -169,6 +169,7 @@ export const DashNav = React.memo<Props>((props) => {
     if (kioskMode || isPlaylistRunning()) {
       return [];
     }
+    console.log(renderLeftActions);
 
     if (canStar) {
       let desc = isStarred
@@ -259,8 +260,7 @@ export const DashNav = React.memo<Props>((props) => {
     if (kioskMode === KioskMode.TV) {
       return [renderTimeControls()];
     }
-
-    if (canEdit && !isFullscreen) {
+    if (!(kioskMode === KioskMode.Custom) && canEdit && !isFullscreen) {
       if (config.featureToggles.emptyDashboardPage) {
         buttons.push(<AddPanelButton dashboard={dashboard} key="panel-add-dropdown" />);
       } else {
@@ -328,7 +328,7 @@ export const DashNav = React.memo<Props>((props) => {
     <AppChromeUpdate
       actions={
         <>
-          {renderLeftActions()}
+          {/* {renderLeftActions()} */}
           <NavToolbarSeparator leftActionsSeparator />
           <ToolbarButtonRow alignment="right">{renderRightActions()}</ToolbarButtonRow>
         </>

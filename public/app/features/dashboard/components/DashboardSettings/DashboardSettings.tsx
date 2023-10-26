@@ -9,6 +9,7 @@ import { Button, ToolbarButtonRow } from '@grafana/ui';
 import { AppChromeUpdate } from 'app/core/components/AppChrome/AppChromeUpdate';
 import { Page } from 'app/core/components/Page/Page';
 import config from 'app/core/config';
+import { getKioskMode } from 'app/core/navigation/kiosk';
 import { contextSrv } from 'app/core/services/context_srv';
 import { AccessControlAction } from 'app/types';
 import { DashboardMetaChangedEvent } from 'app/types/events';
@@ -31,11 +32,14 @@ export interface Props {
   sectionNav: NavModel;
   pageNav: NavModelItem;
   editview: string;
+  queryParams?: string;
 }
 
 const onClose = () => locationService.partial({ editview: null, editIndex: null });
 
-export function DashboardSettings({ dashboard, editview, pageNav, sectionNav }: Props) {
+export function DashboardSettings({ dashboard, editview, pageNav, sectionNav, queryParams }: Props) {
+  const kioskMode = getKioskMode(queryParams);
+  console.log('kioskMode', kioskMode);
   const [updateId, setUpdateId] = useState(0);
   useEffect(() => {
     dashboard.events.subscribe(DashboardMetaChangedEvent, () => setUpdateId((v) => v + 1));
@@ -43,7 +47,8 @@ export function DashboardSettings({ dashboard, editview, pageNav, sectionNav }: 
 
   // updateId in deps so we can revaluate when dashboard is mutated
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const pages = useMemo(() => getSettingsPages(dashboard), [dashboard, updateId]);
+  const mode = kioskMode === 'custom';
+  const pages = useMemo(() => getSettingsPages(dashboard, !mode), [mode, dashboard, updateId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onPostSave = () => {
     dashboard.meta.hasUnsavedFolderChange = false;
@@ -88,7 +93,7 @@ export function DashboardSettings({ dashboard, editview, pageNav, sectionNav }: 
   );
 }
 
-function getSettingsPages(dashboard: DashboardModel) {
+function getSettingsPages(dashboard: DashboardModel, mode: boolean) {
   const pages: SettingsPage[] = [];
 
   if (dashboard.meta.canEdit) {
@@ -116,12 +121,13 @@ function getSettingsPages(dashboard: DashboardModel) {
       subTitle: 'Variables can make your dashboard more dynamic and act as global filters.',
     });
 
-    pages.push({
-      title: 'Links',
-      id: 'links',
-      icon: 'link',
-      component: LinksSettings,
-    });
+    mode &&
+      pages.push({
+        title: 'Links',
+        id: 'links',
+        icon: 'link',
+        component: LinksSettings,
+      });
   }
 
   if (dashboard.meta.canMakeEditable) {
@@ -160,12 +166,13 @@ function getSettingsPages(dashboard: DashboardModel) {
     }
   }
 
-  pages.push({
-    title: 'JSON Model',
-    id: 'dashboard_json',
-    icon: 'arrow',
-    component: JsonEditorSettings,
-  });
+  mode &&
+    pages.push({
+      title: 'JSON Model',
+      id: 'dashboard_json',
+      icon: 'arrow',
+      component: JsonEditorSettings,
+    });
 
   return pages;
 }

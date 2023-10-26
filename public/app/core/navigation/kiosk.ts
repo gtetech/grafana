@@ -8,7 +8,8 @@ export function getKioskMode(queryParams: UrlQueryMap): KioskMode | null {
     case 'tv':
       return KioskMode.TV;
     //  legacy support
-    case '1':
+    case 'custom':
+      return KioskMode.Custom;
     case true:
       return KioskMode.Full;
     default:

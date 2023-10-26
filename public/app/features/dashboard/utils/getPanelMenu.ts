@@ -132,32 +132,35 @@ export function getPanelMenu(
   }
 
   if (dashboard.canEditPanel(panel) && !panel.isEditing) {
-    menu.push({
-      text: t('panel.header-menu.edit', `Edit`),
-      iconClassName: 'edit',
-      onClick: onEditPanel,
-      shortcut: 'e',
-    });
+    false &&
+      menu.push({
+        text: t('panel.header-menu.edit', `Edit`),
+        iconClassName: 'edit',
+        onClick: onEditPanel,
+        shortcut: 'e',
+      });
   }
 
-  menu.push({
-    text: t('panel.header-menu.share', `Share`),
-    iconClassName: 'share-alt',
-    onClick: onSharePanel,
-    shortcut: 'p s',
-  });
+  false &&
+    menu.push({
+      text: t('panel.header-menu.share', `Share`),
+      iconClassName: 'share-alt',
+      onClick: onSharePanel,
+      shortcut: 'p s',
+    });
 
   if (
     contextSrv.hasAccessToExplore() &&
     !(panel.plugin && panel.plugin.meta.skipDataQuery) &&
     panel.datasource?.uid !== SHARED_DASHBOARD_QUERY
   ) {
-    menu.push({
-      text: t('panel.header-menu.explore', `Explore`),
-      iconClassName: 'compass',
-      onClick: onNavigateToExplore,
-      shortcut: 'p x',
-    });
+    false &&
+      menu.push({
+        text: t('panel.header-menu.explore', `Explore`),
+        iconClassName: 'compass',
+        onClick: onNavigateToExplore,
+        shortcut: 'p x',
+      });
   }
 
   const inspectMenu: PanelMenuItem[] = [];
@@ -295,13 +298,14 @@ export function getPanelMenu(
   }
 
   if (subMenu.length) {
-    menu.push({
-      type: 'submenu',
-      text: t('panel.header-menu.more', `More...`),
-      iconClassName: 'cube',
-      subMenu,
-      onClick: onMore,
-    });
+    false &&
+      menu.push({
+        type: 'submenu',
+        text: t('panel.header-menu.more', `More...`),
+        iconClassName: 'cube',
+        subMenu,
+        onClick: onMore,
+      });
   }
 
   if (dashboard.canEditPanel(panel) && !panel.isEditing && !panel.isViewing) {

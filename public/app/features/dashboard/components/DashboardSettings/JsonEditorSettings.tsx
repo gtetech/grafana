@@ -35,7 +35,7 @@ export function JsonEditorSettings({ dashboard, sectionNav }: SettingsPageProps)
         />
         {dashboard.meta.canSave && (
           <div>
-            <Button type="submit" onClick={onClick}>
+            <Button disabled type="submit" onClick={onClick}>
               Save changes
             </Button>
           </div>
