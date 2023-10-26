@@ -1,5 +1,5 @@
 import { css, cx } from '@emotion/css';
-import React, { FC } from 'react';
+import React, { useEffect, FC } from 'react';
 
 import { colorManipulator } from '@grafana/data';
 import { useTheme2, styleMixins } from '@grafana/ui';
@@ -15,7 +15,9 @@ export const LoginLogo: FC<BrandComponentProps & { logo?: string }> = ({ classNa
 
 const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
   const theme = useTheme2();
-
+  useEffect(() => {
+    parent.postMessage(window.location.href, 'http://localhost:3005');
+  }, []);
   const background = css`
     &:before {
       content: '';

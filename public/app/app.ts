@@ -114,7 +114,10 @@ export class GrafanaApp {
   async init() {
     try {
       // Let iframe container know grafana has started loading
-      parent.postMessage('GrafanaAppInit', '*');
+      // this.nmetricsIframe()
+
+      // parent.postMessage('GrafanaAppInit', '*');
+      parent.postMessage(window.location.href, 'http://localhost:3005');
 
       const initI18nPromise = initializeI18n(config.bootData.user.language);
 
