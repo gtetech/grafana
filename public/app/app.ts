@@ -117,7 +117,7 @@ export class GrafanaApp {
       // this.nmetricsIframe()
 
       // parent.postMessage('GrafanaAppInit', '*');
-      parent.postMessage(window.location.href, 'http://localhost:3005');
+      parent.postMessage(window.location.href, '*');
 
       const initI18nPromise = initializeI18n(config.bootData.user.language);
 
