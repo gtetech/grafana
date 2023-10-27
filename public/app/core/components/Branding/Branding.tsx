@@ -45,7 +45,7 @@ const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
 };
 
 const MenuLogo: FC<BrandComponentProps> = ({ className }) => {
-  return <img className={className} src="public/img/n-logo.png" alt="Narayana" />;
+  return <img className={className} src="public/img/n-logo.png" alt="Nmetrics" />;
 };
 
 const LoginBoxBackground = () => {
@@ -61,8 +61,8 @@ export class Branding {
   static LoginBackground = LoginBackground;
   static MenuLogo = MenuLogo;
   static LoginBoxBackground = LoginBoxBackground;
-  static AppTitle = 'Narayana Portal';
-  static LoginTitle = 'Welcome to Narayana Portal';
+  static AppTitle = 'NMetrics';
+  static LoginTitle = 'Welcome to Nmetrics';
   static GetLoginSubTitle = (): null | string => {
     return null;
   };

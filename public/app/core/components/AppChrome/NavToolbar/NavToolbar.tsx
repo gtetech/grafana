@@ -52,7 +52,7 @@ export function NavToolbar({
           />
         </div>
       ) : (
-        <div>Narayana dashboard</div>
+        <div>NMetrics dashboard</div>
       )}
       {!customMode && <Breadcrumbs breadcrumbs={breadcrumbs} className={styles.breadcrumbsWrapper} />}
       <div className={styles.actions}>
