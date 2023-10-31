@@ -1,0 +1,45 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - dev
+
+env:
+  STAGING_ECR_REPOSITORY: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/nmetrics-grafana
+  STAGING_AWS_REGION: ap-south-1
+  REPO_NAME: grafana
+  TAG: ${{ github.sha }}
+  
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up NodeJs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
+          aws configure set region ${{ env.STAGING_AWS_REGION }}
+          aws ecr get-login-password --region ${{ env.STAGING_AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.STAGING_AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.STAGING_AWS_REGION }}.amazonaws.com
+      - name: Build and tag Docker image
+        run: |
+          docker build -t ${{ env.STAGING_ECR_REPOSITORY }}:${{ env.TAG }} .
+           
+      - name: Push Docker image to ECR
+        run: |
+          docker push ${{ env.STAGING_ECR_REPOSITORY }}:${{ env.TAG }}
