@@ -1,0 +1,33 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - grafana-deploy
+
+env:
+  STAGING_ECR_REPOSITORY: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/nmetrics-grafana
+  STAGING_AWS_REGION: ap-south-1
+  REPO_NAME: grafana
+  TAG: dc98e5694b260e1a74ded3cf19374144a179b111
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: SSH into EC2 instance
+      uses: appleboy/ssh-action@master
+      with:
+        host: ec2-13-233-251-25.ap-south-1.compute.amazonaws.com
+        username: ec2-user
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          sudo -S su
+          docker stop nmetrics-grafana
+          docker rm nmetrics-grafana
+          docker images -q --filter=reference='*${{ env.STAGING_ECR_REPOSITORY }}*' | xargs docker rmi
+          docker pull ${{ env.STAGING_ECR_REPOSITORY }}:${{ env.TAG }}
+          docker run -d --restart=always --name nmetrics-grafana -p 4000:4000 ${{ env.STAGING_ECR_REPOSITORY }}:${{ env.TAG }}
