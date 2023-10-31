@@ -58,6 +58,7 @@ jobs:
         username: ec2-user
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
+          sudo su
           docker stop nmetrics-grafana
           docker rm nmetrics-grafana
           docker images -q --filter=reference='*${{ env.STAGING_ECR_REPOSITORY }}*' | xargs docker rmi
