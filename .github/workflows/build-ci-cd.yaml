@@ -43,3 +43,23 @@ jobs:
       - name: Push Docker image to ECR
         run: |
           docker push ${{ env.STAGING_ECR_REPOSITORY }}:${{ env.TAG }}
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: SSH into EC2 instance
+      uses: appleboy/ssh-action@master
+      with:
+        host: ec2-13-233-251-25.ap-south-1.compute.amazonaws.com
+        username: ec2-user
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          docker stop nmetrics-grafana
+          docker rm nmetrics-grafana
+          docker images -q --filter=reference='*${{ env.STAGING_ECR_REPOSITORY }}*' | xargs docker rmi
+          docker pull ${{ env.STAGING_ECR_REPOSITORY }}:${{ env.TAG }}
+          docker run -d --restart=always --name nmetrics-grafana -p 4000:4000 ${{ env.STAGING_ECR_REPOSITORY }}:${{ env.TAG }}
