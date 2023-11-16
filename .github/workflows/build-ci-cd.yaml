@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - grafana-build
+      - dev
 
 env:
   STAGING_ECR_REPOSITORY: ${{ secrets.STAGING_AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/nmetrics-grafana
